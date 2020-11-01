@@ -1,8 +1,9 @@
-from ..data import alchemy
+from src.api_src.data import alchemy
 
 
 class EpisodesModel(alchemy.Model):
     __tablename__ = 'episodes'
+    __table_args__ = {'extend_existing': True}
     id = alchemy.Column(alchemy.Integer, primary_key=True)
     name = alchemy.Column(alchemy.String(100))
     season = alchemy.Column(alchemy.Integer)
@@ -21,7 +22,7 @@ class EpisodesModel(alchemy.Model):
 
     @classmethod
     def filter_names(cls, name):
-        cls.query.filter_by(name=name).first()
+        return cls.query.filter_by(name=name).first()
 
     def save_to_db(self):
         alchemy.session.add(self)
