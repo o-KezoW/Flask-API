@@ -238,3 +238,4 @@ fabric.properties
 
 #Environment
 /flaskenv
+/src/api_src/data.db
