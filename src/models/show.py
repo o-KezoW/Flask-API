@@ -25,5 +25,5 @@ class ShowModel(alchemy.Model, DatabaseHandler):
         return cls.query.filter_by(name=name).first()
 
     @classmethod
-    def filter_id(cls, _id):
-        return cls.query.filter_by(id=_id).first()
+    def filter_id(cls, id):
+        return cls.query.filter_by(id=id).first()

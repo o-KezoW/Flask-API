@@ -27,25 +27,35 @@ def post_show():
     return jsonify(result.json())
 
 
-@app.route('/show/<string:name>', methods=['GET'])
-def get_show(name):
-    result = show.ShowModel.filter_name(name)
+@app.route('/show/<int:id>', methods=['GET'])
+def get_show(id):
+    result = show.ShowModel.filter_id(id)
     if result:
         return result.json()
     else:
-        return {'message': f'The api couldn\'t found "{name}"'}, 404
+        return {'message': f'The api couldn\'t found "{id}"'}, 404
 
 
-@app.route('/show/<string:name>/episode', methods=['POST'])
-def post_episode_to_show(name):
+@app.route('/show/<int:id>/episode', methods=['POST'])
+def post_episode_to_show(id):
     request_data = request.get_json()
-    parent = show.ShowModel.filter_name(name)
+    parent = show.ShowModel.filter_id(id)
     if parent:
         new_episode = episode.EpisodeModel(name=request_data['name'], season=request_data['season'], show_id=parent.id)
         new_episode.save_to_db()
         return new_episode.json()
     else:
-        return {'message': f'The api couldn\'t found "{name}"'}, 404
+        return {'message': f'The api couldn\'t found "{id}"'}, 404
+
+
+@app.route('/show/delete/<int:id>', methods=['DELETE'])
+def delete_show(id):
+    try:
+        deleted_show = show.ShowModel.filter_id(id)
+        deleted_show.delete_from_db()
+    except AttributeError:
+        return {'message': f'The api couldn\'t found "{id}"'}, 404
+    return {'message': 'The show got deleted with success'}, 202
 
 
 if __name__ == '__main__':
